@@ -1,27 +1,22 @@
-package org.example;
+package io.github.tomastoloza.visitcounter;
 
 import com.sun.org.slf4j.internal.Logger;
 import com.sun.org.slf4j.internal.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 public class VisitCounter {
 
     private static Logger logger = LoggerFactory.getLogger(VisitCounter.class);
 
-    Map<Long, Long> count(Map<String, UserStats>... visits) {
+    public Map<Long, Long> count(Map<String, UserStats>... visits) {
         Map<Long, Long> resultMap = new HashMap<>();
         Arrays.stream(visits).forEach(visit -> {
             // Iterates every entry
-            // TODO: Investigate how to do it with streams
-            for (Map.Entry<String, UserStats> entry : visit.entrySet()) {
-                sumValues(entry.getValue(), entry.getKey(), resultMap);
-            }
+            visit.forEach((key, value) -> sumValues(value, key, resultMap));
         });
-        logger.error("ResultMap = " + resultMap);
         return resultMap;
     }
 
@@ -41,6 +36,5 @@ public class VisitCounter {
                 logger.error(String.format("Could not parse key with value %s", key));
             }
         }
-
     }
 }
